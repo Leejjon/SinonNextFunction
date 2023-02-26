@@ -1,5 +1,6 @@
 import * as sinon from 'sinon';
 import {Response, Request, NextFunction} from 'express';
+
 import {dynamicHelloWorld} from "./HelloWorld";
 
 describe('Test hello world api', () => {
@@ -26,10 +27,12 @@ describe('Test hello world api', () => {
         // sinon.assert.notCalled(...);
     });
 
-    it('Print hello + dynamic name', () => {
-        let requestWithQueryParam: Partial<Request> = {query: { name: "Leon"} }
+    it('Query parameter is missing', () => {
+        let requestWithQueryParam: Partial<Request> = {query: {} }
         dynamicHelloWorld(<Request> requestWithQueryParam, <Response> res, next);
 
+        sinon.assert.notCalled(res.status as sinon.SinonStub);
+        sinon.assert.notCalled(res.send as sinon.SinonStub);
         // TODO: Assert here that next() has not been called.
         // sinon.assert.called(next);
     });
