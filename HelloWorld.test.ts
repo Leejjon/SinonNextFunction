@@ -4,13 +4,13 @@ import {Response, Request} from 'express';
 import {dynamicHelloWorld} from "./HelloWorld";
 
 describe('Test hello world api', () => {
-    let res: Partial<Response> = {
-        contentType: sinon.stub(),
-        status: sinon.stub(),
-        send: sinon.stub()
-    };
-
-    let next = sinon.stub();
+    function createStubbedResponse() {
+        return {
+            contentType: sinon.stub(),
+            status: sinon.stub(),
+            send: sinon.stub()
+        }
+    }
 
     afterEach(() => {
         sinon.restore();
@@ -18,6 +18,8 @@ describe('Test hello world api', () => {
 
     it('Succesfully print Hello Leon', () => {
         let requestWithQueryParam: Partial<Request> = {query: { name: "Leon"} }
+        let res: Partial<Response> = createStubbedResponse();
+        let next = sinon.stub();
         dynamicHelloWorld(<Request> requestWithQueryParam, <Response> res, next);
 
         sinon.assert.calledWith(res.status as sinon.SinonStub, 200);
@@ -27,6 +29,8 @@ describe('Test hello world api', () => {
 
     it('Query parameter is missing', () => {
         let requestWithQueryParam: Partial<Request> = {query: {} }
+        let res: Partial<Response> = createStubbedResponse();
+        let next = sinon.stub();
         dynamicHelloWorld(<Request> requestWithQueryParam, <Response> res, next);
 
         sinon.assert.notCalled(res.status as sinon.SinonStub);
