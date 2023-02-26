@@ -1,5 +1,5 @@
 import * as sinon from 'sinon';
-import {Response, Request, NextFunction} from 'express';
+import {Response, Request} from 'express';
 
 import {dynamicHelloWorld} from "./HelloWorld";
 
@@ -10,8 +10,7 @@ describe('Test hello world api', () => {
         send: sinon.stub()
     };
 
-    // TODO: Fix this TypeScript error
-    let next: NextFunction = sinon.stub();
+    let next = sinon.stub();
 
     afterEach(() => {
         sinon.restore();
@@ -23,8 +22,7 @@ describe('Test hello world api', () => {
 
         sinon.assert.calledWith(res.status as sinon.SinonStub, 200);
         sinon.assert.calledWith(res.send as sinon.SinonStub, "Hello, Leon")
-        // TODO: Assert here that next() has not been called.
-        // sinon.assert.notCalled(...);
+        sinon.assert.notCalled(next);
     });
 
     it('Query parameter is missing', () => {
@@ -33,7 +31,6 @@ describe('Test hello world api', () => {
 
         sinon.assert.notCalled(res.status as sinon.SinonStub);
         sinon.assert.notCalled(res.send as sinon.SinonStub);
-        // TODO: Assert here that next() has not been called.
-        // sinon.assert.called(next);
+        sinon.assert.called(next);
     });
 });
